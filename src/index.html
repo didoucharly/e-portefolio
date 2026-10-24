@@ -1,0 +1,1157 @@
+<!--
+  Hello!
+  -
+  Simplefolio is a clean and responsive portfolio template for Developers!
+  Created by Jacobo Martinez.
+  -
+  Github Repo: https://github.com/cobiwave/simplefolio/
+  Readme: https://github.com/cobiwave/simplefolio/README.md
+  -
+  For business & inquires, contact me -> jacobojavier98@gmail.com
+-->
+<!DOCTYPE html>
+<html lang="fr" class="sr">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/png" href="assets/favicon.png" />
+
+    <!-- Todo: put here your site title -->
+    <title>[DIDOU Charly] | Etudiant ingénieur</title>
+    <!-- Todo: add some coding keywords below - e.g: (javascript, yourusername, etc) -->
+    <meta name="keywords" content="[username], [name], skill" />
+    <!-- Todo: improve your SEO by adding a small description of you -->
+    <meta name="description" content="[DIDOU Charly] | Etudiant ingénieur" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="styles.scss" />
+    <style>
+      /* Barre superieure fixe avec le bouton de langue (toujours visible) */
+      #topbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        flex-wrap: nowrap; /* barre sur une seule ligne : le carre reste toujours a droite */
+        min-height: 3.5rem;
+        z-index: 10000;
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 0.4rem 0.75rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+      }
+      /* Bloc gauche : grand rectangle avec les liens de navigation */
+      #topbar-left {
+        flex: 1 1 auto; /* occupe tout l'espace disponible */
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        background: rgba(245, 245, 245, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 0.6rem;
+        padding: 0.25rem 0.75rem;
+      }
+      /* Bloc droit : petit carre avec le bouton de langue */
+      #lang-box {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(245, 245, 245, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 0.6rem;
+        padding: 0.25rem;
+        aspect-ratio: 1; /* forme carree */
+        align-self: stretch; /* meme hauteur que le bloc gauche */
+      }
+      #lang-toggle {
+        flex-shrink: 0;
+        margin-left: 0; /* plus besoin : le carre est son propre bloc a droite */
+        display: flex;
+        flex-direction: column; /* FR au-dessus de EN : forme compacte et carree */
+        background: #fff;
+        align-self: center;
+        border: 2px solid #2b2b2b;
+        border-radius: 0.5rem; /* arrondi doux, adapte au format vertical */
+        overflow: hidden;
+        cursor: pointer;
+        font-family: inherit;
+        user-select: none;
+        white-space: nowrap;
+        /* la taille du bouton suit la largeur d'ecran, comme les liens du menu */
+        font-size: clamp(0.75rem, 1vw + 0.5rem, 0.85rem);
+      }
+      #lang-toggle span {
+        /* padding proportionnel a la taille de police : meme look a toutes les tailles */
+        padding: 0.4em 1.1em;
+        font-size: inherit;
+        line-height: 1.2;
+        font-weight: 700;
+        color: #2b2b2b;
+        background: transparent;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+      #lang-toggle span.active {
+        background: #2b2b2b;
+        color: #fff;
+      }
+      #lang-toggle span:hover:not(.active) {
+        background: #efefef;
+      }
+      /* Navigation de sections dans la barre superieure */
+      #topnav {
+        display: flex;
+        flex-wrap: wrap; /* les liens passent a la ligne plutot que d'etre coupes */
+        align-items: center;
+        gap: 0.4rem 1rem;
+        margin-right: auto;
+        min-width: 0;
+      }
+      #topnav::-webkit-scrollbar {
+        display: none;
+      }
+      #topnav a {
+        /* Taille fluide : reduite progressivement selon la largeur d'ecran */
+        font-size: clamp(0.72rem, 1vw + 0.45rem, 1.85rem);
+        font-weight: 600;
+        color: #2b2b2b;
+        text-decoration: none;
+        white-space: nowrap;
+        padding: 0.3rem 0.1rem;
+        border-bottom: 2px solid transparent;
+        transition: color 0.2s ease, border-color 0.2s ease;
+      }
+      @media (max-width: 768px) {
+        #topnav {
+          gap: 0.75rem;
+        }
+        /* bordure legerement plus fine sur mobile pour un rendu harmonieux */
+        #lang-toggle {
+          border-width: 1.5px;
+        }
+      }
+      #topnav a:hover {
+        color: #000;
+        border-bottom-color: #2b2b2b;
+      }
+      /* Decale le contenu pour ne pas passer sous la barre fixe */
+      body {
+        padding-top: 6rem; /* mis a jour dynamiquement par le script en bas de page */
+      }
+      /* Deroulement fluide et decalage des ancres sous la barre fixe */
+      html {
+        scroll-behavior: smooth;
+      }
+      section {
+        scroll-margin-top: 6.5rem;
+      }
+      /* Fond de la section "Modeles de carriere" identique a celui de "contact" */
+      #career {
+        background-image: linear-gradient(135deg, #e09b05 0%, #cbc107 100%);
+      }
+      #engagement {
+        background-image: linear-gradient(135deg, #e09b05 0%, #cbc107 100%);
+      }
+    </style>
+    <script
+      defer
+      src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"
+    ></script>
+
+    <!-- Todo: remove the below script once you finish your portfolio -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+
+  <!-- Todo: read the following HTML Todos to create your stunning portfolio website -->
+  <body>
+    <div id="top"></div>
+
+    <!-- Bouton de changement de langue (toujours visible en haut à droite) -->
+<div id="topbar">
+    <!-- Bloc gauche : grand rectangle avec la navigation -->
+    <div id="topbar-left">
+    <nav id="topnav" aria-label="Navigation des sections">
+      <a href="#hero" data-i18n="navHome">Accueil</a>
+      <a href="#about" data-i18n="navAbout">Carrière</a>
+      <a href="#projects" data-i18n="navProjects">Projet d'ingénierie</a>
+      <a href="#career" data-i18n="navCareer">Echanges professionnels</a>
+      <a href="#mobility" data-i18n="navMobility">Mobilités</a>
+      <a href="#engagement" data-i18n="navEngagement">Engagements</a>
+      <a href="#sports" data-i18n="navSports">Sports & Activités</a>
+      <a href="#contact" data-i18n="navContact">Contact</a>
+    </nav>
+    </div>
+    <!-- Bloc droit : petit carre avec le bouton de langue -->
+    <div id="lang-box">
+    <div id="lang-toggle" role="group" aria-label="Langue / Language">
+      <span data-lang="fr" class="active" role="button" tabindex="0" aria-pressed="true">FR</span>
+      <span data-lang="en" role="button" tabindex="0" aria-pressed="false">EN</span>
+    </div>
+    </div>
+</div>
+
+    <!-- **** Hero Section **** -->
+    <section id="hero" class="jumbotron">
+      <div class="container">
+        <h1 class="hero-title load-hidden">
+          <span data-i18n="heroHi">Enchanté, je suis </span><span class="text-color-main">Charly DIDOU,</span>
+          <br />
+          <span data-i18n="heroIntro">Un étudiant en ingénierie.</span>
+        </h1>
+        <p class="hero-cta load-hidden">
+          <a rel="noreferrer" class="cta-btn cta-btn--hero" href="#about" data-i18n="heroCta"
+            >En savoir plus</a
+          >
+        </p>
+      </div>
+    </section>
+    <!-- /END Hero Section -->
+
+    <!-- **** About Section **** -->
+    <section id="about">
+      <div class="container">
+        <h2 class="section-title load-hidden" data-i18n="aboutTitle">À propos de moi</h2>
+        <div class="row about-wrapper">
+          <div class="col-md-6 col-sm-12">
+            <div class="about-wrapper__image load-hidden">
+              <img
+                alt="Profile Image"
+                class="img-fluid rounded shadow-lg"
+                height="auto"
+                width="300px"
+                src="assets/profile.jpg"
+                alt="Profile Image"
+              />
+            </div>
+          </div>
+          <div class="col-md-5 col-sm-12">
+            <div class="about-wrapper__info load-hidden">
+              <p class="about-wrapper__info-text" data-i18n="aboutP1">
+                Étudiant en ingénierie à l'ENSEEIHT de Toulouse, au sein du département 
+                3EA (Électrotechnique, Énergie Électrique et Automatique),
+                je me suis formé au préalable en classe préparatoire PSI au lycée Joliot 
+                Curie. Ce parcours sélectif m'a permis de développer une rigueur scientifique 
+                solide et d'être admissible aux concours CCINP et Mines Télécom. 
+                Cette double culture, alliant la profondeur théorique de la CPGE à la dimension 
+                appliquée de la formation d'ingénieur, constitue aujourd'hui le socle de ma 
+                démarche académique et professionnelle.
+              </p>
+              </div>
+            </div>
+          <p class="about-wrapper__info-text">
+
+          </p>
+          <div class="row about-wrapper">
+            <div class="col-md-12 col-sm-12">
+              <div class="about-wrapper__info load-hidden">
+                <p class="about-wrapper__info-text" data-i18n="aboutP2">
+                  Mon expérience la plus marquante reste la création, en solitaire et sur une
+                  année complète, d'un jeu vidéo sur Roblox. Ce projet de longue haleine, 
+                  mené de bout en bout — de la conception au développement jusqu'à la diffusion 
+                  — a attiré plus de 2 000 utilisateurs. Affronter seul les obstacles techniques, 
+                  maintenir la motivation sur la durée et itérer sans relâche face aux 
+                  problématiques rencontrées a considérablement renforcé ma résilience et mon 
+                  autonomie. Par ailleurs, mon TIPE, réalisé en binôme, portait sur la dépollution 
+                  des sites par l'utilisation de détecteurs de métaux, un projet d'électrotechnique 
+                  qui m'a initié aux enjeux concrets du traitement des sols pollués et au travail 
+                  d'équipe en contexte scientifique.
+
+                </p>
+                <p class="about-wrapper__info-text" data-i18n="aboutP3">
+                  Je souhaite m'orienter vers le rétrofit de machines dans le milieu industriel : 
+                  donner une seconde vie aux équipements en les modernisant, en améliorant leur 
+                  performance, leur sûreté de fonctionnement et leur efficacité énergétique. 
+                  Mon objectif est de contribuer à la transition industrielle en accompagnant 
+                  les entreprises dans la modernisation de leurs parcs machines, un domaine d'
+                  avenir au cœur des enjeux de compétitivité et de transition écologique de 
+                  l'industrie française et européenne.
+
+                </p>
+                <p class="about-wrapper__info-text" data-i18n="aboutP4">
+                  Mes convictions professionnelles s'articulent autour de la préservation des 
+                  ressources et de l'optimisation des systèmes existants. Je suis convaincu qu'il 
+                  est plus pertinent, tant sur le plan environnemental qu'économique, de valoriser 
+                  et moderniser ce qui existe déjà plutôt que de tout remplacer. La sécurité, qu'
+                  elle soit celle des personnes, des installations ou des process, est pour moi 
+                  une exigence non négociable qui doit guider toute démarche d'ingénierie. Ces 
+                  valeurs nourrissent une vision de l'industrie résolument tournée vers la 
+                  modernisation raisonnée et durable.
+                </p>
+              <span class="d-flex mt-4">
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn cta-btn--resume"
+                  href="assets/CVfr.pdf"
+                  data-i18n="cvFr"
+                >
+                  Voir CV Français
+                </a>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn cta-btn--resume"
+                  href="assets/CVen.pdf"
+                  data-i18n="cvEn"
+                >
+                  Voir CV Anglais
+                </a>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn cta-btn--resume"
+                  href="https://www.youtube.com/watch?v=dVNFzsxoUjU"
+                  data-i18n="videoCta"
+                >
+                  Vidéo de présentation
+                </a>
+              </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </section>
+    <!-- /END About Section -->
+
+    <!-- **** Projects Section **** -->
+    <section id="projects">
+      <div class="container">
+        <div class="project-wrapper">
+          <h2 class="section-title dark-blue-text" data-i18n="projectsTitle">Projets d'ingénierie</h2>
+
+          <!-- Notice: each .row is a project -->
+          <div class="row">
+            <div class="col-lg-4 col-sm-12">
+              <div class="project-wrapper__text load-hidden">
+                <h3 class="project-wrapper__text-title" data-i18n="robloxTitle">Développeur indépendant de ROBLOX</h3>
+                <div>
+                  <p class="mb-4" data-i18n="robloxText">
+                    L'objectif était de crée un jeu nommé "S.N.A.I.L." collaboratif, immersif et complet pour les utilisateurs.
+                  J'ai appris durant plus d'1an à surmonter les problèmes algorithmiques, à structurer 
+                  modulairement du code, et à manager un projet de A à Z en respectant un cahier des charges.
+                  +2000 utilisateurs ont expérimenté le jeu.
+                  </p>
+                </div>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn cta-btn--hero"
+                  href="https://www.roblox.com/games/18736155253/S-N-A-I-L"
+                  data-i18n="viewGame"
+                >
+                  Voir le jeu
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+              <div class="project-wrapper__image load-hidden">
+                <a rel="noreferrer" href="https://www.roblox.com/games/18736155253/S-N-A-I-L" target="_blank">
+                  <div
+                    data-tilt
+                    data-tilt-max="4"
+                    data-tilt-glare="true"
+                    data-tilt-max-glare="0.5"
+                    class="thumbnail rounded js-tilt"
+                  >
+                    <img
+                      alt="Project Image"
+                      class="img-fluid"
+                      src="assets/project.jpg"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /END Project -->
+
+          <!-- Notice: each .row is a project -->
+          <div class="row">
+            <div class="col-lg-4 col-sm-12">
+              <div class="project-wrapper__text load-hidden">
+                <h3 class="project-wrapper__text-title" data-i18n="tipeTitle">TIPE sur la dépollution de site par l'utilisation de détecteurs de métaux</h3>
+                <div>
+                  <p class="mb-4" data-i18n="tipeText">
+                      L'objectif était d'identifier la famille de différents échantillon de métaux issus de terrains à nettoyer 
+                    afin d'extraire les métaux de famille non souhaitée. L'étude s'est concentré sur l'analyse de 3 familles 
+                    de métaux : les ferromagnétiques, les diamagnétiques et les paramagnétiques. Ainsi, j'ai appris à collaborer 
+                    sur un projet, à concevoir un circuit électrique, à prélever un signal avec un oscilloscope et à réaliser un 
+                    diagramme de Bode. De plus j'ai codé en Python et à utilisé le logiciel FEMM.
+                  </p>
+                </div>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn cta-btn--hero"
+                  href="assets/Mcot.pdf"
+                  data-i18n="mcotCta"
+                >
+                  Voir la Mcot
+                </a>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn text-color-main"
+                  href="assets/DIAPORAMA.pdf"
+                  data-i18n="diaporamaCta"
+                >
+                  Voir le Diaporama
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+              <div class="project-wrapper__image load-hidden">
+                <a rel="noreferrer" href="assets/Mcot.pdf" target="_blank">
+                  <div
+                    data-tilt
+                    data-tilt-max="4"
+                    data-tilt-glare="true"
+                    data-tilt-max-glare="0.5"
+                    class="thumbnail rounded js-tilt"
+                  >
+                    <img
+                      alt="Project Image"
+                      class="img-fluid"
+                      src="assets/TIPE.jpg"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /END Project -->
+          
+          
+          <!-- /END Project -->
+        </div>
+      </div>
+    </section>
+    <!-- /END Projects Section -->
+    <section id="career">
+      <div class="container">
+        <h2 class="section-title" data-i18n="careerTitle" style = "color: white;">Echanges Professionnels</h2>
+        <div class="row about-wrapper" style = "color: white;">
+          <div class="col-md-6 col-sm-12">
+            <div class="about-wrapper__image load-hidden">
+              <img
+                alt="Profile Image"
+                class="img-fluid rounded shadow-lg"
+                height="auto"
+                width="300px"
+                src="assets/Kamel_head.jpg"
+                alt="Profile Image"
+              />
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="about-wrapper__info load-hidden">
+              <h3 class="project-wrapper__text-title" style="font-size: 20; font-weight: bold;">Kamel Ben Jerad</h3>
+              <p class="about-wrapper__info-text">
+                System & Project Manager
+
+              </p>
+              <p class="about-wrapper__info-text" data-i18n="kamelP1">
+                Chargé du bon fonctionnement d'une usine en Isère chez HEXCEL FIBERS. Il s'occupe de la modification d'automates, d'interfaces homme-machine (HMI) et de la maintenance des systèmes de contrôle de commande. Il suit l'ensemble des investissements de l'usine et s'occupe de la relation entre fournisseur et client.
+
+              </p>
+              <p class="about-wrapper__info-text" data-i18n="kamelP2">
+                L'échange m'a permis de comprendre l'importance de l'anglais et de la logique, le déroulement complet d'un projet de rétrofit ainsi que la nécéssité de se spécialiser sur un type de machine dans le cadre du rétrofit.
+              </p>
+              <a
+                rel="noreferrer"
+                target="_blank"
+                class="cta-btn cta-btn--resume"
+                href="assets/rapport_Kamel.pdf"
+              >
+                <span data-i18n="reportCta">Rapport de rencontre</span>
+              </a>
+              <p class="about-wrapper__info-text">
+              
+              </p>
+            </div>
+          </div>
+        </div>
+        <p class="about-wrapper__info-text">
+                
+        </p>
+        <div class="row about-wrapper" style = "color: white;">
+          <div class="col-md-6 col-sm-12">
+            <div class="about-wrapper__image load-hidden">
+              <img
+                alt="Profile Image"
+                class="img-fluid rounded shadow-lg"
+                height="auto"
+                width="300px"
+                src="assets/Guillaume_head.jpg"
+                alt="Profile Image"
+              />
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="about-wrapper__info load-hidden">
+              <h3 class="project-wrapper__text-title" data-i18n="model2Title" style="font-size: 20; font-weight: bold;">Guillaume Richard</h3>
+              <p class="about-wrapper__info-text" data-i18n="jobTitle2">
+                Responsable d'offre Groupe Turbo Alternateur
+
+              </p>
+              <p class="about-wrapper__info-text" data-i18n="model2Info">
+                Il s'occupe de la réception des cahiers des charges de ses clients, les réajuste en fonction des précisions à apporter. 
+              Principalement en bureau d'étude pour vendre le modèle de groupe turbo alternateur le plus adapté, Il s'occupe également de la poser 
+              et de vérifier son bon fonctionnement. Il a pu travaillé sur un projet de modernisation d'une usine d'incinération 
+              d'ordures qui avait des installations agées de 20 à 30 ans.
+
+              </p>
+              <p class="about-wrapper__info-text" data-i18n="exchangeValue2">
+                J'ai compris la différence entre revamping et rétrofit et il m'a fait comprendre qu'il faut garder sa capactité à trouver une information par soi-même à l'aire de l'IA. De plus, selon lui la curiosité est l'élément clé de la réussite.
+              </p>
+              <a
+                rel="noreferrer"
+                target="_blank"
+                class="cta-btn cta-btn--resume"
+                href="assets/rapport_Guillaume.pdf"
+              >
+                <span data-i18n="reportCta">Rapport de rencontre</span>
+              </a>
+              <p class="about-wrapper__info-text">
+              
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p class="about-wrapper__info-text">
+                
+        </p>
+
+        <div class="row about-wrapper" style = "color: white;">
+          <div class="col-md-6 col-sm-12">
+            <div class="about-wrapper__image load-hidden">
+              <img
+                alt="Profile Image"
+                class="img-fluid rounded shadow-lg"
+                height="auto"
+                width="300px"
+                src="assets/Dominique_head.jpg"
+                alt="Profile Image"
+              />
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="about-wrapper__info load-hidden">
+              <h3 class="project-wrapper__text-title" data-i18n="model3Title" style="font-size: 20; font-weight: bold;">Dominique Bonnet</h3>
+              <p class="about-wrapper__info-text" data-i18n="jobTitle3">
+                Ancienne directrice de Airbus
+
+              </p>
+              <p class="about-wrapper__info-text" data-i18n="model3Info">
+                Durant ses 30 années d'expériences chez Airbus, elle est devenue responsable industrielle de la chaîne 
+                d'assemblage final de l'A380 et de l'assemblage final des avions de la gamme A320. Elle apporte un éclairage
+                industriel concret sur des sujets comme l'organisation de la production, la supply chain ou la gestion
+                d'organisations industrielles complexes.
+
+              </p>
+              <p class="about-wrapper__info-text" data-i18n="exchangeValue3">
+                Cette échange m'a permis de comprendre l'importance des softs-skills pour évoluer et ajouter de la plus value aux interactions humaines : clé pour avancer et réussir. Oser prendre contact avec l'autre autour d'un café permet d'en en apprendre plus et de développer son réseau . De plus, selon elle il faut exercer un métier qui nous motive.
+              </p>
+              <a
+                rel="noreferrer"
+                target="_blank"
+                class="cta-btn cta-btn--resume"
+                href="assets/rapport_Dominique.pdf"
+              >
+                <span data-i18n="reportCta">Rapport de rencontre</span>
+              </a>
+              <p class="about-wrapper__info-text">
+              
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- **** Modeles de carriere Section **** -->
+    <!-- /END les Section -->
+    <!-- **** Mobility Section **** -->
+    <section id="mobility">
+      <div class="container">
+        <div class="project-wrapper">
+          <h2 class="section-title dark-blue-text" data-i18n="mobilityTitle">Mobilités envisagées</h2>
+          
+          <!-- Notice: each .row is a project -->
+          <div class="row">
+            <div class="col-lg-4 col-sm-12">
+              <div class="project-wrapper__text load-hidden">
+                <h3 class="project-wrapper__text-title" data-i18n="mob1Title" style="font-size: 20px; font-weight: bold;">Ho Chi Minh City University of Technology - VIETNAM</h3>
+                <div>
+                  <p class="mb-4" data-i18n="mob1Text">
+                    Bilatéral - Génie électrique (système énergétique)
+                  </p>
+                  <p class="mb-4" data-i18n="mob1SubText">
+                    Ce semestre à l'Ho Chi Minh City University of Technology complètera ma formation 3EA de l'ENSEEIHT par une spécialisation en systèmes énergétiques, directement liée à mon projet en génie électrique. Le Vietnam, pays en forte croissance industrielle, offre un cadre concret pour étudier l'efficacité énergétique des systèmes, une composante clé de la modernisation des équipements. Cette mobilité hors d'Europe me fera gagner en autonomie et en adaptabilité, des qualités essentielles pour ma future carrière d'ingénieur. En un semestre, elle apporte une perspective internationale à mon parcours sans le détourner de sa trajectoire.
+                  </p>
+                </div>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn cta-btn--hero"
+                  href="https://pfiev.org/formations/"
+                >
+                  <span data-i18n="viewSchool">Voir l'école</span>
+                </a>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn text-color-main"
+                  href="https://maps.app.goo.gl/XrTPn2FSgWoFfBBt7"
+                >
+                  <span data-i18n="googleMapsCta">Google maps</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+              <div class="project-wrapper__image load-hidden">
+                <a rel="noreferrer" href="https://www.independent.co.uk/travel/asia/ho-chi-minh-city-things-to-do-saigon-vietnam-skydeck-ban-thanh-district-one-cu-chi-tunnels-a7859681.html" target="_blank">
+                  <div
+                    data-tilt
+                    data-tilt-max="4"
+                    data-tilt-glare="true"
+                    data-tilt-max-glare="0.5"
+                    class="thumbnail rounded js-tilt"
+                  >
+                    <img
+                      alt="Project Image"
+                      class="img-fluid"
+                      src="assets/Vietnam.jpg"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /END Project -->
+          <p class="about-wrapper__info-text">
+                
+          </p>
+          <p class="about-wrapper__info-text">
+                
+          </p>
+          <p class="about-wrapper__info-text">
+                
+          </p>
+          <!-- Notice: each .row is a project -->
+          <div class="row">
+            <div class="col-lg-4 col-sm-12">
+              <div class="project-wrapper__text load-hidden">
+                <h3 class="project-wrapper__text-title" data-i18n="mob2Title" style="font-size: 20px; font-weight: bold;">University of Ljubljana - SLOVENIE</h3>
+                <div>
+                  <p class="mb-4" data-i18n="mob2Text">
+                    Erasmus - Electrical engineering
+                  </p>
+                  <p class="mb-4" data-i18n="mob2SubText">
+                    Ce semestre à l'University of Ljubljana complètera ma formation 3EA de l'ENSEEIHT par une approche européenne de premier plan en génie électrique. La Slovénie, reconnue pour son expertise en réseaux électriques et énergies, offre un cadre académique de qualité aligné sur mes enseignements actuels. C'est l'occasion de confronter ma formation à une autre méthodologie européenne, dans un pays où la transition énergétique est un enjeu structurant. Cette expérience renforcerait mon profil international en cohérence avec mon projet de carrière en génie électrique.
+                  </p>
+                </div>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn cta-btn--hero"
+                  href="https://www.uni-lj.si/en/university"
+                >
+                  <span data-i18n="viewSchool">Voir l'école</span>
+                </a>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn text-color-main"
+                  href="https://maps.app.goo.gl/oGgrPQyw7GyzioRh6"
+                >
+                  <span data-i18n="googleMapsCta">Google maps</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+              <div class="project-wrapper__image load-hidden">
+                <a rel="noreferrer" href="https://www.routard.com/fr/guide/europe/slovenie/ljubljana" target="_blank">
+                  <div
+                    data-tilt
+                    data-tilt-max="4"
+                    data-tilt-glare="true"
+                    data-tilt-max-glare="0.5"
+                    class="thumbnail rounded js-tilt"
+                  >
+                    <img
+                      alt="Project Image"
+                      class="img-fluid"
+                      src="assets/Slovenie.jpg"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /END Project -->
+          <p class="about-wrapper__info-text">
+                
+          </p>
+          <p class="about-wrapper__info-text">
+                
+          </p>
+          <p class="about-wrapper__info-text">
+                
+          </p>
+          <!-- Notice: each .row is a project -->
+          <div class="row">
+            <div class="col-lg-4 col-sm-12">
+              <div class="project-wrapper__text load-hidden">
+                <h3 class="project-wrapper__text-title" data-i18n="mob3Title" style="font-size: 20px; font-weight: bold;">University of West Attica - Grèce</h3>
+                <div>
+                  <p class="mb-4" data-i18n="mob3Text">
+                    Erasmus - 714 Electronics and automation
+                  </p>
+                  <p class="mb-4" data-i18n="mob3SubText">
+                    Ce semestre à l'University of West Attica complètera ma formation 3EA de l'ENSEEIHT par un focus sur l'électronique et l'automatique, deux piliers de mon département. L'automatique est au cœur du contrôle des machines, une compétence directement utile à mon projet de modernisation des équipements industriels. La Grèce, avec son tissu industriel en mutation, offre un cadre pertinent pour étudier ces systèmes en conditions réelles. Cette mobilité courte et structurée renforcerait mon autonomie et mon profil international sans dévier de ma trajectoire.
+                  </p>
+                </div>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn cta-btn--hero"
+                  href="http://uniwa.gr"
+                >
+                  <span data-i18n="viewSchool">Voir l'école</span>
+                </a>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn text-color-main"
+                  href="https://maps.app.goo.gl/RGErTeGPAyQSLKQY9"
+                >
+                  <span data-i18n="googleMapsCta">Google maps</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+              <div class="project-wrapper__image load-hidden">
+                <a rel="noreferrer" href="https://www.getyourguide.com/fr-fr/aigaleo-l212298/ttd/">
+                  <div
+                    data-tilt
+                    data-tilt-max="4"
+                    data-tilt-glare="true"
+                    data-tilt-max-glare="0.5"
+                    class="thumbnail rounded js-tilt"
+                  >
+                    <img
+                      alt="Project Image"
+                      class="img-fluid"
+                      src="assets/Grece.jpg"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /END Project -->
+        </div>
+      </div>
+    </section>
+    <!-- /END Mobility Section -->
+
+<!-- **** Engagement Section **** -->
+    <section id="engagement">
+      <div class="container">
+        <h2 class="section-title load-hidden" data-i18n="engagementTitle" style = "color: white;">ENGAGEMENT</h2>
+
+        
+        <!-- Notice: each .row is a project -->
+          <div class="row">
+            <div class="col-lg-4 col-sm-12">
+              <div class="project-wrapper__text load-hidden" style = "color: white;">
+                <h3 class="project-wrapper__text-title" data-i18n="glanerieTitle" style="font-size: 25; font-weight: bold;">Bénévole en Ressourcerie</h3>
+                <div>
+                  <p class="mb-4" data-i18n="glanerieText">
+                    Depuis 2026, je suis bénévole à la ressourcerie "La Glanerie" à Toulouse ce qui m'aligne sur la valeur de la 
+                    préservation de matière. J'opère dans le grand atelier où je suis en charge de trier, nettoyer, mettre à prix 
+                    des objets de décoration interieur et extérieur. Je fais 
+                    également de la mise en rayon dans la boutique où je mets en valeur les objets. Cette expérience renforce ma 
+                    communication notamment avec une équipe ayant une mixité sociale.
+                  </p>
+                </div>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn cta-btn--resume"
+                  href="https://www.la-glanerie.org/association"
+                >
+                 <span data-i18n="glanerieCta">La Glanerie</span>
+                </a>
+               
+              </div>
+              <p class="mb-4">
+                
+              </p>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+              <div class="project-wrapper__image load-hidden">
+                <a rel="noreferrer" href="https://www.vie-economique.com/actualites/toulouse-la-glanerie-20-ans-de-trouvailles/" target="_blank">
+                  <div
+                    data-tilt
+                    data-tilt-max="4"
+                    data-tilt-glare="true"
+                    data-tilt-max-glare="0.5"
+                    class="thumbnail rounded js-tilt"
+                  >
+                    <img
+                      alt="Project Image"
+                      class="img-fluid"
+                      src="assets/GLANERIE.jpg"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /END Project -->
+          
+          <p class="mb-4">
+               
+
+
+              
+          </p>
+           <!-- Notice: each .row is a project -->
+          <div class="row">
+            <div class="col-lg-4 col-sm-12">
+              <div class="project-wrapper__text load-hidden" style = "color: white;">
+                <h3 class="project-wrapper__text-title" data-i18n="faimTitle" style="font-size: 25; font-weight: bold;">Participant à la "Course contre la faim"</h3>
+                <div>
+                  <p class="mb-4" data-i18n="faimText">
+                    Sur les années 2022 et 2023, j'ai participé aux "Courses contre la faim". Le but 
+                    de ces évenements est de lever un maximum de fond pour reduire l’insécurité nutritionnelle 
+                    dans le monde. Elles ont eu lieu au lycée de l'Elorn en Bretagne 
+                    et ont levé 45 000€ sur les 2 années.
+                  </p>
+                </div>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn cta-btn--resume"
+                  href="https://www.actioncontrelafaim.org/"
+                >
+                 <span data-i18n="ongCta">L'ONG</span>
+                </a>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn"
+                  href="https://www.ouest-france.fr/bretagne/landerneau-29800/a-landerneau-600-lyceens-a-la-course-contre-la-faim-0e140d36-f4c0-11ed-bccc-089eeb8251d9"
+                  style = "color: white;"
+                  >
+                  <span data-i18n="pressCta">Un article de presse</span>
+                </a>
+              </div>
+              <p class="mb-4">
+                
+              </p>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+              <div class="project-wrapper__image load-hidden">
+                <a rel="noreferrer" href="https://www.ouest-france.fr/bretagne/landerneau-29800/a-landerneau-600-lyceens-a-la-course-contre-la-faim-0e140d36-f4c0-11ed-bccc-089eeb8251d9" target="_blank">
+                  <div
+                    data-tilt
+                    data-tilt-max="4"
+                    data-tilt-glare="true"
+                    data-tilt-max-glare="0.5"
+                    class="thumbnail rounded js-tilt"
+                  >
+                    <img
+                      alt="Project Image"
+                      class="img-fluid"
+                      src="assets/Course.jpg"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Notice: each .row is a project -->
+          <p class="mb-4">
+               
+
+
+              
+          </p>
+      </div>
+    </section>
+    <!-- /END ENGAGEMENT Section -->
+
+
+    <!-- **** Sports Section **** -->
+    <section id="sports">
+      <div class="container">
+        <div class="project-wrapper">
+          <h2 class="section-title dark-blue-text" data-i18n="sportsTitle">Sports & Activités</h2>
+
+          <div class="row about-wrapper">
+            <div class="col-md-12 col-sm-12">
+              <div class="about-wrapper__info load-hidden">
+                <p class="about-wrapper__info-text" data-i18n="sport1">
+                  2023-2024 : 🏐 Pratique du volleyball pendant un an au sein de l'association sportive du lycée de l'Elorn : 
+                  coordination collective, communication en situation de jeu et entraide au service d'un 
+                  objectif commun — développement de l'esprit d'équipe et de la réactivité dans un cadre structuré.
+
+                </p>
+                <p class="about-wrapper__info-text" data-i18n="sport2">
+                  2025-2026 : 🏃🏻🏋️‍♀️ Pratique hebdomadaire de la musculation et de la course à pied sur une année scolaire : régularité 
+                  de l'entraînement, progression mesurée et dépassement de soi — engagement dans la durée et discipline 
+                  appliquées à l'effort physique comme à la rigueur personnelle.
+
+                </p>
+
+                <p class="about-wrapper__info-text" data-i18n="sport3">
+                  2025-Présent : 🍳 Pratique quotidienne de la cuisine salée et pratique hebdomadaire de la cuisine sucrée : expérimentation de recettes, 
+                  adaptation des techniques et du dosage — démarche d'essai-erreur et d'amélioration 
+                  continue appliquée hors du cadre technique. (Plats Asiatiques & Européens, tarte amandine, croissant, cookies, crumble...)
+                </p>
+                
+              </div>
+            </div>
+          </div>
+          <p class="about-wrapper__info-text">
+
+          </p>
+          <h2 class="section-title dark-blue-text" data-i18n="autresTitle">Autres</h2>
+          <div class="row about-wrapper">
+            <div class="col-md-12 col-sm-12">
+              <div class="about-wrapper__info load-hidden">
+                <p class="about-wrapper__info-text" data-i18n="permisB">
+                  Détenteur du Permis B
+                </p>
+              </div>
+            </div>
+          </div>
+          <p class="about-wrapper__info-text" style="color: white;">
+            """"""""""""""""""""""""" """""""""""""""""""""""    
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- **** Contact Section **** -->
+    <section id="contact" style="transform: scaleX(-1)">
+      <div class="container" style="transform: scaleX(-1)">
+        <h2 class="section-title">Contact</h2>
+        <div class="contact-wrapper load-hidden">
+          <div class="social-links">
+          <a rel="noreferrer" href="https://www.linkedin.com/in/charly-didou-213632433/" target="_blank">
+            <i class="fa fa-linkedin fa-inverse"></i>
+          </a>
+          </div>
+          <p class="contact-wrapper__text">[didoucharlypro@gmail.com]</p>
+          <p class="contact-wrapper__text">[06 31 99 22 57]</p>
+          
+          <a
+            rel="noreferrer"
+            target="_blank"
+            class="cta-btn cta-btn--resume"
+            href="mailto:didoucharlypro@gmail.com"
+            ><span data-i18n="contactCta">Me contacter</span></a
+          >
+        </div>
+        </div>
+      </div>
+    </section>
+    <!-- /END Contact Section -->
+
+    <!-- **** Footer Section **** -->
+    <footer class="footer navbar-static-bottom">
+      <div class="container">
+        <a rel="noreferrer" href="#top" class="back-to-top">
+          <i class="fa fa-angle-up fa-2x" aria-hidden="true"></i>
+        </a>
+        <hr />
+
+        <!-- Notice: if you want to give me some credit, it will be huge for me! if not, put your data on it -->
+        <p class="footer__text">
+          © <span data-i18n="footerP1">2026 - Page créée par</span>
+          <a rel="noreferrer" href="https://www.linkedin.com/in/charly-didou-213632433/" target="_blank"
+            >Charly DIDOU</a
+          >
+           <span data-i18n="footerP2">à partir d'un projet de </span>
+          <a rel="noreferrer" href="https://github.com/cobiwave" target="_blank"
+            >Jacobo Martí­nez (MIT License)</a
+          >
+        </p>
+
+        
+      </div>
+    </footer>
+    <!-- /END Footer Section -->
+
+<!-- Ajuste le decalage du contenu a la hauteur reelle de la barre fixe -->
+<script>
+function syncTopbar() {
+const bar = document.getElementById("topbar");
+if (!bar) return;
+const h = bar.offsetHeight;
+document.body.style.paddingTop = h + "px";
+document.querySelectorAll("section").forEach(function (s) {
+s.style.scrollMarginTop = h + 12 + "px";
+});
+}
+window.addEventListener("resize", syncTopbar);
+window.addEventListener("load", syncTopbar);
+syncTopbar();
+</script>
+
+    <!-- **** Systeme de traduction FR/EN **** -->
+    <script>
+      // Traductions anglaises. Le francais est capture directement depuis la
+      // page au premier chargement : le retour au francais est donc toujours
+      // identique a l'original, sans duplication des textes.
+      const translationsEn = {
+        docTitle: "[DIDOU Charly] | Engineering Student",
+        navHome: "Home",
+        navAbout: "Career",
+        navProjects: "Engineering Projects",
+        navCareer: "Professional Exchanges",
+        navMobility: "Mobilities",
+        navEngagement: "Civic Engagement",
+        navSports: "Sports & Activities",
+        navContact: "Contact",
+        heroHi: "Nice to meet you, I am ",
+        heroIntro: "An engineering student.",
+        heroCta: "Learn more",
+        aboutTitle: "About me",
+        aboutP1: "An engineering student at ENSEEIHT in Toulouse, in the 3EA department (Electrical Engineering, Electrical Energy and Automation), I first trained in a PSI preparatory class at the Joliot Curie high school. This selective path allowed me to develop solid scientific rigor and to qualify for the CCINP and Mines Telecom entrance exams. This dual culture, combining the theoretical depth of the preparatory classes with the applied dimension of an engineering degree, now forms the foundation of my academic and professional approach.",
+        aboutP2: "My most memorable experience remains the creation, entirely on my own and over a full year, of a video game on Roblox. This long-term project, carried out from start to finish - from design and development through to release - attracted more than 2,000 users. Facing technical obstacles alone, staying motivated over time and iterating relentlessly on the problems encountered considerably strengthened my resilience and autonomy. In addition, my TIPE, completed in a pair, focused on the depollution of sites using metal detectors, an electrotechnical project that introduced me to the concrete challenges of treating polluted soils and to teamwork in a scientific context.",
+        aboutP3: "I want to move towards machine retrofitting in industry: giving equipment a second life by modernizing it, improving its performance, its operational safety and its energy efficiency. My goal is to contribute to the industrial transition by supporting companies in the modernization of their machine fleets, a forward-looking field at the heart of the competitiveness and ecological transition challenges of French and European industry.",
+        aboutP4: "My professional convictions revolve around the preservation of resources and the optimization of existing systems. I am convinced that it is more relevant, both environmentally and economically, to upgrade and modernize what already exists rather than replace everything. Safety - of people, facilities and processes alike - is for me a non-negotiable requirement that must guide any engineering approach. These values drive a vision of industry resolutely focused on sensible and sustainable modernization.",
+        cvFr: "View French CV",
+        cvEn: "View English CV",
+        videoCta: "Presentation video",
+        projectsTitle: "Engineering Projects",
+        robloxTitle: "Independent ROBLOX Developer",
+        robloxText: "The goal was to create a collaborative, immersive and complete game called \"S.N.A.I.L.\" for its users. Over more than a year, I learned to overcome algorithmic problems, to structure code in a modular way, and to manage a project from A to Z while meeting a set of requirements. More than 2,000 users have played the game.",
+        viewGame: "View the game",
+        tipeTitle: "TIPE on the depollution of sites using metal detectors",
+        tipeText: "The goal was to identify the family of various metal samples from land to be cleaned, in order to extract the metals from unwanted families. The study focused on the analysis of 3 families of metals: ferromagnetic, diamagnetic and paramagnetic. I thus learned to collaborate on a project, to design an electrical circuit, to sample a signal with an oscilloscope and to produce a Bode diagram. I also coded in Python and used the FEMM software.",
+        mcotCta: "View the Mcot",
+        diaporamaCta: "View the slideshow",
+        careerTitle: "Professional Exchanges",
+        kamelP1: "Responsible for the smooth operation of a plant in Isere at HEXCEL FIBERS. He handles the modification of PLCs, human-machine interfaces (HMI) and the maintenance of control systems. He monitors all of the plant's investments and manages the supplier-customer relationship.",
+        kamelP2: "This exchange helped me understand the importance of English and of logic, the full course of a retrofit project, and the need to specialize in one type of machine when carrying out retrofit work.",
+        reportCta: "Meeting report",
+        model2Title: "Guillaume Richard",
+        model3Title: "Dominique Bonnet",
+        jobTitle2: "Turbo Generator Set Offer Manager",
+        jobTitle3: "Former Director at Airbus",
+        model2Info: "He handles receiving his clients' specifications and adjusts them based on the details that need to be added. Mostly working in the design office, he sells the most suitable turbo generator set model, and is also responsible for installing it and checking that it works properly. He worked on a project to modernize a waste incineration plant whose installations were 20 to 30 years old.",
+        model3Info: "During her 30 years of experience at Airbus, she became industrial manager of the A380 final assembly line and of the final assembly of A320 family aircraft. She provides concrete industrial insight on topics such as production organization, supply chain, and the management of complex industrial organizations.",
+        exchangeValue2: "I understood the difference between revamping and retrofitting, and he made me realize that you need to keep your ability to find information on your own in the age of AI. Moreover, according to him, curiosity is the key element of success.",
+        exchangeValue3: "This exchange helped me understand the importance of soft skills for career growth and for adding value to human interactions: a key to moving forward and succeeding. Daring to reach out to someone over a coffee allows you to learn more and grow your network. She also believes you should practice a profession that motivates you.",
+        mobilityTitle: "Envisaged mobility plans",
+        mob1Title: "Ho Chi Minh City University of Technology - VIETNAM",
+        mob2Title: "University of Ljubljana - SLOVENIA",
+        mob3Title: "University of West Attica - GREECE",
+        mob1Text: "Bilateral - Electrical engineering (energy systems)",
+        mob2Text: "Erasmus - Electrical engineering",
+        mob3Text: "Erasmus - 714 Electronics and automation",
+        mob1SubText: "This semester at Ho Chi Minh City University of Technology will complement my 3EA program at ENSEEIHT with a specialization in energy systems, directly connected to my electrical engineering career plan. Vietnam, a country experiencing strong industrial growth, offers a concrete setting to study the energy efficiency of systems, a key component of equipment modernization. This mobility outside Europe will help me gain autonomy and adaptability, essential qualities for my future career as an engineer. In one semester, it will bring an international perspective to my path without diverting it from its trajectory.",
+        mob2SubText: "This semester at the University of Ljubljana will complement my 3EA program at ENSEEIHT with a top-tier European approach to electrical engineering. Slovenia, recognized for its expertise in electrical grids and energy, offers a high-quality academic environment aligned with my current studies. It is an opportunity to compare my training with another European methodology, in a country where the energy transition is a major structuring issue. This experience would strengthen my international profile, in line with my career plan in electrical engineering.",
+        mob3SubText: "This semester at the University of West Attica will complement my 3EA program at ENSEEIHT with a focus on electronics and automation, two pillars of my department. Automation is at the heart of machine control, a skill directly useful to my project on modernizing industrial equipment. Greece, with its evolving industrial landscape, offers a relevant setting to study these systems in real-world conditions. This short, structured mobility would strengthen my autonomy and my international profile without deviating from my trajectory.",
+        viewSchool: "View the school",
+        googleMapsCta: "Google Maps",
+        engagementTitle: "Civic Engagement",
+        glanerieTitle: "Volunteer at a ressourcerie (reuse center)",
+        glanerieText: "Since 2026, I have been volunteering at the \"La Glanerie\" ressourcerie in Toulouse, which aligns with my value of preserving materials. I work in the large workshop, where I am in charge of sorting, cleaning and pricing indoor and outdoor decoration items. I also stock the shelves in the shop, where I highlight the objects. This experience strengthens my communication, especially within a socially diverse team.",
+        faimTitle: "Participant in the \"Race Against Hunger\"",
+        faimText: "In 2022 and 2023, I took part in the \"Courses contre la faim\" (Race Against Hunger). The aim of these events is to raise as much money as possible to reduce food insecurity around the world. They were held at the l'Elorn high school in Brittany and raised EUR 45,000 over the two years.",
+        ongCta: "The NGO",
+        glanerieCta: "La Glanerie",
+        pressCta: "A press article",
+        sportsTitle: "Sports & Activities",
+        sport1: "2023-2024:  🏐  Played volleyball for a year with the sports association of the l'Elorn high school: collective coordination, in-game communication and mutual support serving a common goal - building team spirit and reactivity in a structured environment.",
+        sport2: "2025-2026:  🏃🏻🏋️‍♀️ Weekly weight training and running over a school year: consistent training, measured progress and self-transcendence - long-term commitment and discipline applied to physical effort as much as to personal rigor.",
+        sport3: "2025-Present:  🍳  Daily savory cooking and weekly sweet cooking: experimenting with recipes, adapting techniques and quantities - a trial-and-error and continuous improvement approach applied outside the technical field. (Asian & European dishes, almond tart, croissants, cookies, crumble...)",
+        autresTitle: "Other",
+        permisB: "Holder of a category B driving licence",
+        contactCta: "Contact me",
+        footerP1: "2026 - Page created by",
+        footerP2: "based on a project by ",
+      };
+
+      let frDict = null;
+      let currentLang = "fr";
+
+      // Photographie du francais present dans la page (avant tout changement)
+      function snapshotFrench() {
+        frDict = { docTitle: document.title };
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          frDict[el.getAttribute("data-i18n")] = el.textContent;
+        });
+      }
+
+      function setLanguage(lang) {
+        if (!frDict) snapshotFrench();
+        const dict = lang === "en" ? translationsEn : frDict;
+        currentLang = lang;
+
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n");
+          if (dict[key] !== undefined) el.textContent = dict[key];
+        });
+
+        if (dict.docTitle) document.title = dict.docTitle;
+        document.documentElement.lang = lang;
+
+        document.querySelectorAll("#lang-toggle span").forEach((s) => {
+          const active = s.getAttribute("data-lang") === lang;
+          s.classList.toggle("active", active);
+          s.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+
+        try {
+          localStorage.setItem("site-lang", lang);
+        } catch (e) {
+          /* stockage indisponible : on ignore */
+        }
+      }
+
+      // Clic (et clavier) sur le bouton FR/EN
+      document.querySelectorAll("#lang-toggle span").forEach((span) => {
+        const select = () => setLanguage(span.getAttribute("data-lang"));
+        span.addEventListener("click", select);
+        span.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            select();
+          }
+        });
+      });
+
+      // Au chargement : langue memorisee si presente, sinon francais
+      try {
+        const saved = localStorage.getItem("site-lang");
+        if (saved === "en" || saved === "fr") currentLang = saved;
+      } catch (e) {
+        /* ignore */
+      }
+      setLanguage(currentLang);
+    </script>
+    <script defer type="module" src="index.js"></script>
+  </body>
+</html>
