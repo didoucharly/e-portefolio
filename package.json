@@ -1,6 +1,9 @@
 {
   "name": "simplefolio",
   "version": "1.0.1",
+  "targets": {
+    "publicUrl": "./"
+  },
   "private": "true",
   "description": "A clean, beautiful and responsive portfolio template for Developers!",
   "source": "src/index.html",
