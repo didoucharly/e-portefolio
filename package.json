@@ -1,9 +1,5 @@
 {
   "name": "simplefolio",
-  "version": "1.0.1",
-  "targets": {
-    "publicUrl": "./"
-  },
   "private": "true",
   "description": "A clean, beautiful and responsive portfolio template for Developers!",
   "source": "src/index.html",
@@ -21,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/cobiwave/simplefolio/issues"
   },
-  "homepage": "https://github.com/cobiwave/simplefolio#readme",
+  "homepage": "https://didoucharly.github.io/e-portefolio/",
   "devDependencies": {
     "@parcel/transformer-sass": "^2.16.4",
     "parcel": "^2.8.2",
